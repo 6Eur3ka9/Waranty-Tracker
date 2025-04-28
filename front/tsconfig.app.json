@@ -15,6 +15,10 @@
     "noEmit": true,
     "jsx": "react-jsx",
 
+   /* Compatibilité ES Modules */
+   "esModuleInterop": true,
+   "allowSyntheticDefaultImports": true,
+
     /* Linting */
     "strict": true,
     "noUnusedLocals": true,

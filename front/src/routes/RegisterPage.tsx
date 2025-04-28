@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
 import { motion } from 'framer-motion';
+import { UserService } from '../service/user.service';
 
 const RegisterPage: React.FC = () => {
   const [username, setUsername] = useState<string>('');
@@ -10,7 +11,24 @@ const RegisterPage: React.FC = () => {
 
   const handleRegister = (e: React.FormEvent) => {
     e.preventDefault();
-    // TODO: implémenter la logique d'inscription
+    
+    const data = {
+        username: username,
+        email: email,
+        password: password,
+    };
+    console.log(data);
+    UserService.resgister(data)
+        .then((response) => {
+           
+            
+            if(response.status === 201){
+                window.location.href = '/login';
+            }
+        })
+        .catch((error) => {
+            console.error(error);
+        });
   };
 
   return (
