@@ -2,12 +2,14 @@ const express = require('express');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const User = require('../models/User');
-const UserImage = require('../models/UserImage');
+const Warantytracker = require('../models/Warantytracker');
 const multer = require('multer');
 const router = express.Router();
 const { CloudinaryStorage } = require('multer-storage-cloudinary');
 const cloudinary = require('cloudinary').v2;
 require('dotenv').config();
+const { sendMail } = require('../service/mail.service');
+const authenticate = require('../middleware/authenticate');
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -48,8 +50,18 @@ router.post('/register', async (req, res) => {
       password: hashedPassword,
       date
     });
+
+    const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
+      expiresIn: '1h',
+    });
+  
+
     await newUser.save();
-    res.status(201).json({ message: 'User registered successfully' , userId: newUser._id });
+    res.status(201).json({
+      message: 'User registered successfully',
+      token,
+      userId: newUser._id,
+    });
   } catch (error) {
     res.status(500).json({ error: 'Error registering user' });
     console.error(error);
@@ -185,94 +197,61 @@ router.post('/upload', upload.single('file'), async (req, res) => {
   }
 });
 
-// l'url : "http://localhost:4242/api/auth/test" avec la requête GET fonctionne dans Postman, le serveur tourne bien
-// router.get('/test', (req, res) => {
-//   res.send('API is working!');
-// });
 
-router.put('/picture/delete', async (req, res) => {
-  // console.log('le req', req);
-  const { picture, user } = req.body;
-  console.log(user)
-  console.log(picture, 'image loggée')
-
-  try {
-    
-    if(!picture || !user) {
-      return res.status(400).json({ error: 'Invalid action' });
-    }
-
-    const userExist = await User.findById(user);
-    if(!userExist) {
-      return res.status(400).json({ error: 'This user doesn\'t exist' });
-    }
-    
-    //ça marchait pas en faisant 'await UserImage.findById({ picture })' car là je lui renvoyais un Objet
-    const pictureExist = await UserImage.findById(picture);
-
-    if(!pictureExist) {
-      return res.status(400).json({ error: 'This image doesn\'t exist' });
-    }
-
-    const deletePicture = await UserImage.deleteOne({ _id: picture });
-
-    if (deletePicture.deletedCount == 1) {
-      return res.status(200).json({ message : 'Image deleted successfully' });
-    } else {
-      return res.status(400).json({ error: 'Image not found' });
-    }
-
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: "Error during the image deletion." });
-  }
-});
-
-router.get('/pictures/:userid', async (req, res) => {
-  const { userid } = req.params;
-  
-  if (!userid) {
-    return res.status(400).json({ error: 'User ID is required' });
-  }
-  try {
-    // Recherche toutes les images correspondant à l'utilisateur
-    const images = await UserImage.find({ user: userid });
-    
-    // Si aucune image n'est trouvée, on retourne une réponse adéquate
-    if (!images || images.length === 0) {
-      return res.status(404).json({ error: 'Aucune image trouvée pour cet utilisateur' });
-    }
-
-    res.status(200).json({ images });
-  } catch (error) {
-    console.error('Erreur lors de la récupération des images:', error);
-    res.status(500).json({ error: 'Erreur lors de la récupération des images' });
-  }
+router.post('/profile/send-reset-password', authenticate, async (req, res) => {
+  const user = await User.findById(req.user.id);
+  const token = jwt.sign({ id: user._id }, process.env.JWT_RESET_SECRET, { expiresIn: '1h' });
+  const link = `${process.env.FRONT_URL}/reset-password?token=${token}`;
+  await sendMail({
+    to: user.email,
+    subject: 'Réinitialisation de votre mot de passe',
+    html: `<p>Cliquez pour réinitialiser : <a href="${link}">${link}</a></p>`
+  });
+  res.json({ message: 'Lien envoyé' });
 });
 
 router.post('/forgot-password', async (req, res) => {
   const { email } = req.body;
   if (!email) {
-    return res.status(400).json({ error: 'L’e‑mail est requis' });
+    return res.status(400).json({ error: 'L’e-mail est requis' });
   }
 
   // 1) Vérifier que l’utilisateur existe
   const user = await User.findOne({ email });
   if (!user) {
-    // On ne révèle pas l’absence d’adresse en base
+    // on ne révèle pas qu'il n'existe pas
     return res.json({ resetLink: null });
   }
 
-  // 2) Générer un token JWT valable 1h
+  // 2) Générer un token de reset
   const token = jwt.sign(
     { id: user._id },
     process.env.JWT_RESET_SECRET,
     { expiresIn: '1h' }
   );
 
-  // 3) Construire le lien de réinitialisation
-  const resetLink = `${process.env.FRONTEND_URL}/reset-password?token=${token}`;
-  return res.json({ resetLink });
+  // 3) Construire le lien
+  const resetLink = `${process.env.FRONT_URL}/reset-password?token=${token}`;
+
+  // **4) Envoyer l’e-mail via Nodemailer**  
+  try {
+    await sendMail({
+      to: user.email,
+      subject: 'Réinitialisez votre mot de passe',
+      html: `
+        <p>Bonjour ${user.username},</p>
+        <p>Cliquez sur ce lien pour réinitialiser votre mot de passe :</p>
+        <a href="${resetLink}">${resetLink}</a>
+        <p>Ce lien expire dans 1 heure.</p>
+      `
+    });
+  } catch (err) {
+    console.error('Erreur envoi mail reset-password:', err);
+    
+  }
+
+  // 5) Répondre
+  res.json({ resetLink });
 });
 
 router.post('/reset-password', async (req, res) => {
