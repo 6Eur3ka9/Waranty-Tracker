@@ -48,7 +48,7 @@ export default function Sidebar({ isOpen, onClose }) {
         {connectedUserToken && (
           <button
             onClick={() => navigate('/subscribe')}
-            className="flex items-center justify-center bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-3 rounded mb-4 mx-4"
+            className="flex items-center justify-center bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-3 rounded mb-4 mx-4 cursor-pointer"
           >
             <HiStar className="inline mr-2" /> Tracker Pro
           </button>

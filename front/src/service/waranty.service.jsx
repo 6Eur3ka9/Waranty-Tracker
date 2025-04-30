@@ -18,7 +18,7 @@ const getWarrantyByUserId = (userId) => {
 
 const deleteWarranty = (warrantyId) => {
     const token = localStorage.getItem('userToken');
-    return AxiosClient.delete(`/warranty/${warrantyId}`,{ headers: { Authorization: `Bearer ${token}` } });
+    return AxiosClient.delete(`/warranty/delete/${warrantyId}`,{ headers: { Authorization: `Bearer ${token}` } });
   }
 
 const editWarranty = (warantyId, data) => {

@@ -13,7 +13,7 @@ export default function MyWarrantyPage() {
   const [warranties, setWarranties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [sortOrder, setSortOrder] = useState('asc'); // 'asc' ou 'desc'
+  const [sortOrder, setSortOrder] = useState(''); // 'asc' ou 'desc'
   const [editingId, setEditingId] = useState(null);
   const [editData, setEditData] = useState({
     productName: '',
@@ -82,7 +82,6 @@ export default function MyWarrantyPage() {
       });
   };
 
-  // Annuler édition
   const cancelEdit = () => {
     setEditingId(null);
   };
@@ -210,13 +209,13 @@ export default function MyWarrantyPage() {
                           <div className="space-x-2">
                             <button
                               onClick={() => startEdit(w)}
-                              className="text-blue-600 hover:underline text-sm"
+                              className="text-blue-600 hover:underline text-sm cursor-pointer"
                             >
                               Éditer
                             </button>
                             <button
                               onClick={() => handleDelete(w._id)}
-                              className="text-red-600 hover:underline text-sm"
+                              className="text-red-600 hover:underline text-sm cursor-pointer "
                             >
                               Supprimer
                             </button>

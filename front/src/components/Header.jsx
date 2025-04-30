@@ -22,7 +22,7 @@ export default function Header({ onMenuClick }) {
           <HiMenu size={24} />
         </button>
         <Link to="/" className="text-xl font-bold text-blue-800">
-          Waranty Tracker
+          Warranty Tracker
         </Link>
       </div>
       <nav className="hidden md:flex space-x-4">
