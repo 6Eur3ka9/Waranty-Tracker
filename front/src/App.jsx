@@ -7,7 +7,8 @@ import MainPage from './routes/mainPage';
 import PublicRoute from './service/PublicRoute';
 import ProfilePage from './routes/ProfilePage';
 import ResetPasswordPage from './routes/ResetPasswordPage';
-
+import WarantyAddPage from './routes/WarantyAddPage';
+import MyWarrantyPage from './routes/MyWarrantyPage';
 
 function App() {
 
@@ -16,9 +17,6 @@ function App() {
     <UserProvider>
       <Router>
         <Routes>
-
-
-
           {
             <Route path="/" element={
               <div
@@ -71,12 +69,30 @@ function App() {
           </div>} />}
 
           <Route path="/reset-password" element={
-              <div
-              >
-                <ResetPasswordPage />
-              </div>
-            } />
-          
+            <div
+            >
+              <ResetPasswordPage />
+            </div>
+          } />
+
+          <Route path="/add-warranty" element={
+            <div
+            >
+              <WarantyAddPage />
+            </div>
+          } />
+          <Route path="/warranty" element={
+            <div
+            >
+              <MyWarrantyPage />
+            </div>
+          } />
+
+
+
+
+
+
 
 
 

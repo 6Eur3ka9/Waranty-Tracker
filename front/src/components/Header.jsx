@@ -1,4 +1,3 @@
-// src/components/Header.js
 import React, { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { HiMenu } from 'react-icons/hi';
@@ -38,12 +37,7 @@ export default function Header({ onMenuClick }) {
           </>
         ) : (
           <>
-            <Link to="/profile" className="text-gray-700 hover:text-gray-900">
-              Mon profil
-            </Link>
-            <button onClick={handleLogout} className="text-red-600 hover:text-red-800">
-              Déconnexion
-            </button>
+            
           </>
         )}
       </nav>

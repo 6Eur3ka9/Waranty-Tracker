@@ -59,6 +59,9 @@ const sendResetLink = () => {
     );
   };
 
+  const addWarranty = (data) => {
+    return AxiosClient.post('/warranty/add', data);
+  }
 
 export const UserService = {
     register,
@@ -73,5 +76,6 @@ export const UserService = {
     resetPassword,
     resetPasswordFinalize,
     sendResetLink,
+    addWarranty,
 
 }

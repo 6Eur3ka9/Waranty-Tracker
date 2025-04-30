@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
 import Header from '../components/Header';
-
 import Sidebar from '../components/Sidebar';
 import { UserService } from '../service/user.service';
 
@@ -21,7 +20,7 @@ export default function MainPage() {
     {
       title: 'Mes garanties',
       desc: 'Consulte et gère toutes tes garanties en cours.',
-      link: '/warranties',
+      link: '/warranty',
       label: 'Voir',
     },
     {
@@ -61,11 +60,12 @@ export default function MainPage() {
 
 
   return (
-    <div className="flex h-screen overflow-hidden">
+    <div className="flex h-screen overflow-hidden rounded-tl-md">
       <Sidebar isOpen={sidebarOpen} onClose={closeSidebar} />
 
       <div className="flex-1 flex flex-col bg-gradient-to-b from-black to-blue-500 overflow-auto">
-        <Header onMenuClick={openSidebar} />
+      <Header onMenuClick={openSidebar} />
+       
 
         <motion.main
           className="flex-1 px-6 lg:px-20 py-16"
@@ -88,7 +88,7 @@ export default function MainPage() {
             </p>
           </motion.section>
 
-          {/* Quick Actions */}
+        
           <section className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-8">
             {cards.map((card, i) => (
               <motion.div

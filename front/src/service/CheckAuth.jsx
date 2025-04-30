@@ -1,4 +1,3 @@
-// src/components/CheckAuth.js
 import React, { useEffect } from 'react';
 import { useUser } from '../service/context.provider';
 import { useNavigate } from 'react-router-dom';

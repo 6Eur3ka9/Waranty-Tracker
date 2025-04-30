@@ -281,4 +281,43 @@ router.post('/reset-password', async (req, res) => {
   }
 });
 
+router.post('/warranty/add',authenticate, async (req, res) => {
+    const { productName, purchaseDate, expiryDate } = req.body;
+    const userId = req.user.id;    
+
+    if (!productName || !purchaseDate || !expiryDate) {
+      return res.status(400).json({ error: 'Tous les champs sont requis' });
+    }
+
+    try {
+      
+      const newWarranty = new Warantytracker({
+        productName,
+        purchaseDate,
+        expiryDate,
+        user: userId,
+      });
+      await newWarranty.save();
+      res.status(201).json({
+        message: 'Produit ajouté avec succès',
+        warranty: newWarranty
+      });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Erreur lors de l\'ajout du produit' });
+    }
+  }
+);
+
+router.get('/warranty/:userId', authenticate, async (req, res) => {
+  const { userId } = req.params;
+  try {
+    const warranties = await Warantytracker.find({ user: userId });
+    res.status(200).json(warranties);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Erreur lors de la récupération des garanties' });
+  }
+});
+
 module.exports = router;
