@@ -77,7 +77,7 @@ export default function Sidebar({ isOpen, onClose }) {
         </div>
       </div>
 
-      {/* Mobile/Tablet Drawer */}
+
       <AnimatePresence>
         {isOpen && (
           <motion.aside

@@ -10,6 +10,8 @@ const cloudinary = require('cloudinary').v2;
 require('dotenv').config();
 const { sendMail } = require('../service/mail.service');
 const authenticate = require('../middleware/authenticate');
+const Stripe = require('stripe');
+const stripe = Stripe(process.env.STRIPE_SECRET_KEY);
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -342,6 +344,41 @@ router.delete('/warranty/delete/:id', authenticate, async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Erreur lors de la suppression de la garantie' });
+  }
+});
+
+router.post('payment/create-subscription', authenticate, async (req, res) => {
+  const { userId, subscriptionType } = req.body;
+  try {
+    if (!userId || !subscriptionType) {
+      return res.status(400).json({ error: 'Tous les champs sont requis' });
+    }
+    // Logique de création d'abonnement ici
+    res.status(201).json({ message: 'Abonnement créé avec succès' });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erreur lors de la création de l\'abonnement' });
+  }
+});
+
+router.post('/payment/create-payment-intent', authenticate, async (req, res) => {
+  try {
+    let { amount, currency } = req.body;
+    amount = Math.trunc(amount); // montant en centimes
+
+    // Création sans return_url ni confirmation
+    const paymentIntent = await stripe.paymentIntents.create({
+      amount,
+      currency
+    });
+
+    return res.json({
+      clientSecret: paymentIntent.client_secret,
+      status: paymentIntent.status
+    });
+  } catch (err) {
+    console.error('Stripe Error:', err);
+    return res.status(500).json({ error: err.message });
   }
 });
 

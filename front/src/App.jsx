@@ -9,6 +9,10 @@ import ProfilePage from './routes/ProfilePage';
 import ResetPasswordPage from './routes/ResetPasswordPage';
 import WarantyAddPage from './routes/WarantyAddPage';
 import MyWarrantyPage from './routes/MyWarrantyPage';
+import SubscribePage from './routes/SuscribePage';
+import PaymentPage from './routes/PaymentPage';
+import MentionsLegalesPage from './routes/MentionsLegalesPage';
+import PaymentResultPage from './routes/PaymentResultPage';
 
 function App() {
 
@@ -88,12 +92,33 @@ function App() {
             </div>
           } />
 
+          <Route path="/subscribe" element={
+            <div
+            >
+              <SubscribePage />
+            </div>
+          } />
 
+          <Route path="/payment" element={
+            <div
+            >
+              <PaymentPage />
+            </div>
+          } />
 
+          <Route path="/legalmentions" element={
+            <div
+            >
+              <MentionsLegalesPage />
+            </div>
+          } />
 
-
-
-
+          <Route path="/payment-result" element={
+            <div
+            >
+              <PaymentResultPage />
+            </div>
+          } />
 
 
         </Routes>
