@@ -17,11 +17,13 @@ const getWarrantyByUserId = (userId) => {
   }
 
 const deleteWarranty = (warrantyId) => {
-    return AxiosClient.delete(`/warranty/${warrantyId}`);
+    const token = localStorage.getItem('userToken');
+    return AxiosClient.delete(`/warranty/${warrantyId}`,{ headers: { Authorization: `Bearer ${token}` } });
   }
 
-const editWarranty = (data) => {
-    return AxiosClient.put('/warranty/edit', data);
+const editWarranty = (warantyId, data) => {
+    const token = localStorage.getItem('userToken');
+    return AxiosClient.put(`/warranty/edit/${warantyId}`, data , { headers: { Authorization: `Bearer ${token}` } });
   }
 
 const getWarrantyById = (warrantyId) => {

@@ -281,33 +281,25 @@ router.post('/reset-password', async (req, res) => {
   }
 });
 
-router.post('/warranty/add',authenticate, async (req, res) => {
-    const { productName, purchaseDate, expiryDate } = req.body;
-    const userId = req.user.id;    
+router.post('/warranty/add', authenticate, async (req, res) => {
+  const { productName, purchaseDate, expiryDate, token } = req.body;
+  const userId = req.user.id;
 
+  try {
     if (!productName || !purchaseDate || !expiryDate) {
       return res.status(400).json({ error: 'Tous les champs sont requis' });
     }
-
-    try {
-      
-      const newWarranty = new Warantytracker({
-        productName,
-        purchaseDate,
-        expiryDate,
-        user: userId,
-      });
-      await newWarranty.save();
-      res.status(201).json({
-        message: 'Produit ajouté avec succès',
-        warranty: newWarranty
-      });
-    } catch (err) {
-      console.error(err);
-      res.status(500).json({ error: 'Erreur lors de l\'ajout du produit' });
-    }
+   
+    const newWaranty = new Warantytracker({
+      productName, purchaseDate, expiryDate, user: userId
+    });
+    await newWaranty.save();
+    res.status(201).json({ message: 'Produit ajouté avec succès', waranty: newWaranty });
+  } catch (error) {
+    console.error(error);
+    res.status(500).json({ error: 'Erreur lors de l\'ajout du produit' });
   }
-);
+});
 
 router.get('/warranty/:userId', authenticate, async (req, res) => {
   const { userId } = req.params;
@@ -317,6 +309,39 @@ router.get('/warranty/:userId', authenticate, async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).json({ error: 'Erreur lors de la récupération des garanties' });
+  }
+});
+
+router.put('/warranty/edit/:id', authenticate, async (req, res) => {
+  const { id } = req.params;
+  const { productName, purchaseDate, expiryDate } = req.body;
+  try {
+    const updatedWarranty = await Warantytracker.findByIdAndUpdate(
+      id,
+      { productName, purchaseDate, expiryDate },
+      { new: true }
+    );
+    if (!updatedWarranty) {
+      return res.status(404).json({ error: 'Garantie non trouvée' });
+    }
+    res.status(200).json({ message: 'Garantie mise à jour avec succès', warranty: updatedWarranty });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Erreur lors de la mise à jour de la garantie' });
+  }
+});
+
+router.delete('/warranty/delete/:id', authenticate, async (req, res) => {
+  const { id } = req.params;
+  try {
+    const deletedWarranty = await Warantytracker.findByIdAndDelete(id);
+    if (!deletedWarranty) {
+      return res.status(404).json({ error: 'Garantie non trouvée' });
+    }
+    res.status(200).json({ message: 'Garantie supprimée avec succès' });
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: 'Erreur lors de la suppression de la garantie' });
   }
 });
 
