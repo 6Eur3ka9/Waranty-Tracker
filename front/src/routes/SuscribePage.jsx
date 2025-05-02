@@ -6,6 +6,8 @@ import { UserService } from '../service/user.service';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 import { useNavigate } from 'react-router-dom';
+import { loadStripe } from '@stripe/stripe-js';
+import { PaymentService } from '../service/payment.service';
 
 export default function SubscribePage() {
   const { connectedUserId, connectedUserToken, setConnectedUserToken } = useUser();
@@ -29,10 +31,25 @@ export default function SubscribePage() {
       .finally(() => setLoading(false));
   }, [connectedUserId, connectedUserToken]);
 
-  const handleSubscribe = () => {
-    navigate('/payment');
-   
-  };
+  const handleSubscribe = async () => {
+    const stripe = await loadStripe('pk_test_51RJa0N4IGhkypRYuIL8QqCSEDilt60t4tZ0FIOlONZZUSMPT08TuKOEESh9y9h8wffMEF8GRNDj5Tbl69anNSlhG001hUs7Ea9');
+
+    const body = {
+      userId: connectedUserId,
+      plan: 'pro',
+    };
+
+    PaymentService.createCheckoutSession(body)
+      .then(res => {
+        console.log(res.data);
+        
+         stripe.redirectToCheckout({ sessionId: res.data.id });
+
+  }).catch(err => {
+        console.error(err);
+        setMessage({ type: 'error', text: 'Une erreur est survenue. Réessayez plus tard.' });
+      })
+  };  
 
   return (
     <div className="flex h-screen overflow-hidden">

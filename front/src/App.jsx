@@ -10,9 +10,12 @@ import ResetPasswordPage from './routes/ResetPasswordPage';
 import WarantyAddPage from './routes/WarantyAddPage';
 import MyWarrantyPage from './routes/MyWarrantyPage';
 import SubscribePage from './routes/SuscribePage';
-import PaymentPage from './routes/PaymentPage';
+
 import MentionsLegalesPage from './routes/MentionsLegalesPage';
-import PaymentResultPage from './routes/PaymentResultPage';
+
+import ForgotPasswordPage from './routes/ForgotPasswordPage';
+import PaymentSuccesPage from './routes/PaymentSuccesPage';
+import PaymentCancelPage from './routes/PaymentCancelPage';
 
 function App() {
 
@@ -99,12 +102,7 @@ function App() {
             </div>
           } />
 
-          <Route path="/payment" element={
-            <div
-            >
-              <PaymentPage />
-            </div>
-          } />
+        
 
           <Route path="/legalmentions" element={
             <div
@@ -113,10 +111,25 @@ function App() {
             </div>
           } />
 
-          <Route path="/payment-result" element={
+          <Route path="/succes" element={
             <div
             >
-              <PaymentResultPage />
+              <PaymentSuccesPage />
+            </div>
+          } />
+
+          <Route path="/cancel" element={
+            <div
+            >
+              <PaymentCancelPage />
+            </div>
+          } />
+
+
+          <Route path="/forgot-password" element={
+            <div
+            >
+              <ForgotPasswordPage />
             </div>
           } />
 

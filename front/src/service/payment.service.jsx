@@ -1,28 +1,11 @@
-import AxiosClient from "./caller.service";
+// src/service/payment.service.js
+import AxiosClient from './caller.service';
 
+const createCheckoutSession = (data) => {
+  const token = localStorage.getItem('userToken');
+  return AxiosClient.post(`/payment/create-checkout-session` , data ,{ headers: { Authorization: `Bearer ${token}` } });
+}
 
-const createSubscription = (data) => {
-    const token = localStorage.getItem('userToken');
-    return AxiosClient.post(
-      '/payment/create-subscription',
-      data,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-  }
-
-  const createPaymentIntent = (data) => {
-    const token = localStorage.getItem('userToken');
-    return AxiosClient.post(
-      '/payment/create-payment-intent',
-      data,
-      { headers: { Authorization: `Bearer ${token}` } }
-    );
-  }
-
-  
-
-
-  export const PaymentService = {
-    createSubscription,
-    createPaymentIntent,
-  };
+export const PaymentService = {
+  createCheckoutSession,
+};
