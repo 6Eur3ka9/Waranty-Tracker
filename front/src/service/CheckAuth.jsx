@@ -1,60 +1,68 @@
-// src/components/CheckAuth.jsx
 import React, { useEffect } from 'react';
+import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 import { useUser } from '../service/context.provider';
-import { useNavigate } from 'react-router-dom';
-import jwt_decode from 'jwt-decode';
 
-export default function CheckAuth({ children }) {
+// petit parseur JWT maison
+function parseJwt(token) {
+  if (!token) return null;
+  const [ , payload ] = token.split('.');
+  try {
+    const json = atob(payload.replace(/-/g, '+').replace(/_/g, '/'));
+    return JSON.parse(json);
+  } catch {
+    return null;
+  }
+}
+
+export default function CheckAuth() {
   const {
     connectedUserToken,
+    setConnectedUserToken,
     setConnectedUserId,
-    setConnectedUserToken
+    setConnectedUserPassword
   } = useUser();
   const navigate = useNavigate();
 
   useEffect(() => {
-    let logoutTimer;
-
-    const doLogout = () => {
-      setConnectedUserId(null);
-      setConnectedUserToken(null);
-      localStorage.removeItem('userId');
-      localStorage.removeItem('userToken');
+    if (!connectedUserToken) {
       navigate('/login', { replace: true });
-    };
+      return;
+    }
+    const decoded = parseJwt(connectedUserToken);
+    if (!decoded?.exp) {
+      logout();
+      return;
+    }
+    const now = Date.now();
+    const expiresAt = decoded.exp * 1000;
+    if (expiresAt <= now) {
+      logout();
+      return;
+    }
+    const timer = setTimeout(logout, expiresAt - now);
+    return () => clearTimeout(timer);
 
-    if (connectedUserToken) {
-      try {
-        const { exp } = jwt_decode(connectedUserToken);
-        const expiresAt = exp * 1000;
-        const now = Date.now();
-
-        if (now >= expiresAt) {
-          
-          doLogout();
-        } else {
-          
-          const delay = expiresAt - now;
-          logoutTimer = setTimeout(doLogout, delay);
-        }
-      } catch (err) {
-        console.error('Échec décodage du token', err);
-        doLogout();
-      }
-    } else {
-      // Pas de token : on force la connexion
+    function logout() {
+      setConnectedUserToken(null);
+      setConnectedUserId(null);
+      setConnectedUserPassword(null);
+      localStorage.removeItem('userToken');
+      localStorage.removeItem('userId');
+      localStorage.removeItem('userPassword');
       navigate('/login', { replace: true });
     }
-
-    return () => {
-      if (logoutTimer) clearTimeout(logoutTimer);
-    };
   }, [
     connectedUserToken,
-    setConnectedUserId,
+    navigate,
     setConnectedUserToken,
-    navigate
+    setConnectedUserId,
+    setConnectedUserPassword
   ]);
 
-  return <>{children}</>;
+  // Si jamais token manquant (et logout n’a pas encore eu lieu)
+  if (!connectedUserToken) {
+    return <Navigate to="/login" replace />;
+  }
+
+  return <Outlet />;
 }

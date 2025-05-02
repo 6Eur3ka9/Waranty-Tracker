@@ -1,21 +1,15 @@
-
 import React from 'react';
-import { Navigate } from 'react-router-dom';
-import { useUser } from '../service/context.provider';
-import { jwtDecode } from "jwt-decode";
+import { Navigate, Outlet } from 'react-router-dom';
+import { useUser } from './context.provider';
 
-export default function PublicRoute({ children }) {
+export default function PublicRoute() {
   const { connectedUserToken } = useUser();
 
+  // Si déjà connecté, on redirige vers la page protégée (ici "/home")
   if (connectedUserToken) {
-    try {
-      const { exp } = jwtDecode(connectedUserToken);
-      if (exp * 1000 > Date.now()) {
-        return <Navigate to="/home" replace />;
-      }
-    } catch {
-      // silent
-    }
+    return <Navigate to="/home" replace />;
   }
-  return <>{children}</>;
+
+  // Sinon on affiche l’Outlet, c’est-à-dire les routes enfants imbriquées
+  return <Outlet />;
 }

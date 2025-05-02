@@ -99,7 +99,7 @@ export default function SubscribePage() {
                 </button>
               </motion.div>
 
-              {/* Pro Plan */}
+             
               <motion.div
                 className={`p-6 bg-white rounded-lg shadow-lg flex flex-col ${
                   plan === 'pro' ? 'border-4 border-green-600' : ''
@@ -115,7 +115,7 @@ export default function SubscribePage() {
                 <button
                   onClick={handleSubscribe}
                   disabled={plan === 'pro'}
-                  className={`mt-auto py-2 rounded-md text-white ${
+                  className={`mt-auto py-2 rounded-md text-white cursor-pointer ${
                     plan === 'pro'
                       ? 'bg-green-300 cursor-not-allowed'
                       : 'bg-green-600 hover:bg-green-700'

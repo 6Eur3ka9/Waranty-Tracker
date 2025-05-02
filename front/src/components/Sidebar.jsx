@@ -1,5 +1,5 @@
-
-import React from 'react';
+// src/components/Sidebar.jsx
+import React, { useEffect, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import {
   HiX,
@@ -11,11 +11,29 @@ import {
 } from 'react-icons/hi';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useUser } from '../service/context.provider';
+import { UserService } from '../service/user.service';
 
 export default function Sidebar({ isOpen, onClose }) {
-  const { setConnectedUserId, setConnectedUserToken, connectedUserToken } = useUser();
+  const {
+    connectedUserId,
+    setConnectedUserId,
+    connectedUserToken,
+    setConnectedUserToken
+  } = useUser();
+  const [userPlan, setUserPlan] = useState(null);
   const navigate = useNavigate();
   const location = useLocation();
+
+  // fetch user data to get plan
+  useEffect(() => {
+    if (connectedUserToken && connectedUserId) {
+      UserService.getUserById(connectedUserId)
+        .then(res => {
+          setUserPlan(res.data.plan); // assumes your user schema has a `plan` field
+        })
+        .catch(console.error);
+    }
+  }, [connectedUserToken, connectedUserId]);
 
   const handleLogout = () => {
     setConnectedUserId(null);
@@ -40,12 +58,14 @@ export default function Sidebar({ isOpen, onClose }) {
 
   return (
     <>
-    
+      {/* Desktop sidebar */}
       <div className="hidden lg:flex lg:flex-col w-64 bg-white shadow-lg h-screen">
         <div className="p-6">
           <Link to="/" className="text-2xl font-bold text-blue-800">WT</Link>
         </div>
-        {connectedUserToken && (
+
+        {/* only show subscribe if not already Pro */}
+        {connectedUserToken && userPlan !== 'pro' && (
           <button
             onClick={() => navigate('/subscribe')}
             className="flex items-center justify-center bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-3 rounded mb-4 mx-4 cursor-pointer"
@@ -53,6 +73,7 @@ export default function Sidebar({ isOpen, onClose }) {
             <HiStar className="inline mr-2" /> Tracker Pro
           </button>
         )}
+
         <ul className="flex-1 space-y-2 px-2">
           {links.map((link, i) => (
             <li key={i}>
@@ -61,6 +82,7 @@ export default function Sidebar({ isOpen, onClose }) {
               </Link>
             </li>
           ))}
+
           <li>
             <button
               onClick={handleLogout}
@@ -70,6 +92,7 @@ export default function Sidebar({ isOpen, onClose }) {
             </button>
           </li>
         </ul>
+
         <div className="px-4 py-4 border-t">
           <Link to="/contact-us" className="block text-sm text-gray-600 hover:underline mb-2">Nous contacter</Link>
           <Link to="/legalmentions" className="block text-sm text-gray-600 hover:underline mb-2">Mentions légales</Link>
@@ -77,7 +100,7 @@ export default function Sidebar({ isOpen, onClose }) {
         </div>
       </div>
 
-
+      {/* Mobile / tablet sidebar */}
       <AnimatePresence>
         {isOpen && (
           <motion.aside
@@ -97,14 +120,17 @@ export default function Sidebar({ isOpen, onClose }) {
                 <Link to="/" className="text-xl font-bold text-blue-800">WT</Link>
                 <button onClick={onClose}><HiX size={24} /></button>
               </div>
-              {connectedUserToken && (
+
+              {/* mt added for mobile/tablet */}
+              {connectedUserToken && userPlan !== 'pro' && (
                 <button
                   onClick={() => { onClose(); navigate('/subscribe'); }}
-                  className="mx-6 mb-4 bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 rounded"
+                  className="mt-4 mx-6 mb-4 bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 rounded"
                 >
                   <HiStar className="inline mr-2" /> Tracker Pro
                 </button>
               )}
+
               <ul className="flex-col space-y-2 p-6">
                 {links.map((link, i) => (
                   <li key={i}>
