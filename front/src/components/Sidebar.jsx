@@ -20,18 +20,26 @@ export default function Sidebar({ isOpen, onClose }) {
     connectedUserToken,
     setConnectedUserToken
   } = useUser();
+
   const [userPlan, setUserPlan] = useState(null);
+  const [loadingPlan, setLoadingPlan] = useState(true);
   const navigate = useNavigate();
   const location = useLocation();
 
-  // fetch user data to get plan
+  // Récupère le plan utilisateur au chargement
   useEffect(() => {
     if (connectedUserToken && connectedUserId) {
       UserService.getUserById(connectedUserId)
         .then(res => {
-          setUserPlan(res.data.plan); // assumes your user schema has a `plan` field
+          setUserPlan(res.data.plan); // suppose un champ `plan` dans l'objet user
         })
-        .catch(console.error);
+        .catch(console.error)
+        .finally(() => {
+          setLoadingPlan(false);
+        });
+    } else {
+      // pas connecté
+      setLoadingPlan(false);
     }
   }, [connectedUserToken, connectedUserId]);
 
@@ -58,14 +66,14 @@ export default function Sidebar({ isOpen, onClose }) {
 
   return (
     <>
-      {/* Desktop sidebar */}
+      {/* Sidebar desktop */}
       <div className="hidden lg:flex lg:flex-col w-64 bg-white shadow-lg h-screen">
         <div className="p-6">
           <Link to="/" className="text-2xl font-bold text-blue-800">WT</Link>
         </div>
 
-        {/* only show subscribe if not already Pro */}
-        {connectedUserToken && userPlan !== 'pro' && (
+        {/* Bouton Tracker Pro uniquement si non pro et une fois le plan chargé */}
+        {connectedUserToken && !loadingPlan && userPlan !== 'pro' && (
           <button
             onClick={() => navigate('/subscribe')}
             className="flex items-center justify-center bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-3 rounded mb-4 mx-4 cursor-pointer"
@@ -82,7 +90,6 @@ export default function Sidebar({ isOpen, onClose }) {
               </Link>
             </li>
           ))}
-
           <li>
             <button
               onClick={handleLogout}
@@ -100,7 +107,7 @@ export default function Sidebar({ isOpen, onClose }) {
         </div>
       </div>
 
-      {/* Mobile / tablet sidebar */}
+      {/* Sidebar mobile/tablette */}
       <AnimatePresence>
         {isOpen && (
           <motion.aside
@@ -121,8 +128,8 @@ export default function Sidebar({ isOpen, onClose }) {
                 <button onClick={onClose}><HiX size={24} /></button>
               </div>
 
-              {/* mt added for mobile/tablet */}
-              {connectedUserToken && userPlan !== 'pro' && (
+              {/* Margin-top ajouté pour mobile/tablette, et condition idem */}
+              {connectedUserToken && !loadingPlan && userPlan !== 'pro' && (
                 <button
                   onClick={() => { onClose(); navigate('/subscribe'); }}
                   className="mt-4 mx-6 mb-4 bg-yellow-400 hover:bg-yellow-500 text-white font-bold py-2 rounded"
