@@ -1,4 +1,4 @@
-// src/pages/AddWarrantyPage.jsx
+
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useUser } from '../service/context.provider';
@@ -14,12 +14,12 @@ export default function AddWarrantyPage() {
   const [expiryDate, setExpiryDate] = useState('');
   const [message, setMessage] = useState({ type: '', text: '' });
   const [warrantyCount, setWarrantyCount] = useState(0);
-  const [plan, setPlan] = useState('free'); // 'free' ou 'pro'
+  const [plan, setPlan] = useState('free');
 
   const openSidebar = () => setSidebarOpen(true);
   const closeSidebar = () => setSidebarOpen(false);
 
-  // Récupérer le plan utilisateur et nombre de garanties
+ 
   useEffect(() => {
     if (!connectedUserToken) return;
     const userId = localStorage.getItem('userId');
@@ -29,12 +29,12 @@ export default function AddWarrantyPage() {
       .then(res => {
         console.log(res.data);
         
-        // suppose res.data.plan contient 'free' ou 'pro'
+  
         setPlan(res.data.plan || 'free');
       })
       .catch(err => console.error('Erreur récupération plan:', err));
 
-    // 2) nombre de garanties existantes
+
     WarrantyService.getWarrantyByUserId(userId)
       .then(res => {
         const list = res.data || [];
@@ -86,7 +86,7 @@ export default function AddWarrantyPage() {
       <Sidebar isOpen={sidebarOpen} onClose={closeSidebar} />
 
       <div className="flex-1 flex flex-col bg-gradient-to-b from-black to-blue-500">
-        {/* Header sur mobile/tablette */}
+    
         <button
           onClick={openSidebar}
           className="md:hidden p-4 text-white focus:outline-none"

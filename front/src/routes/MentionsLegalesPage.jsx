@@ -1,4 +1,4 @@
-// src/pages/MentionsLegalesPage.jsx
+
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import Sidebar from '../components/Sidebar';
@@ -14,7 +14,7 @@ export default function MentionsLegalesPage() {
       <Sidebar isOpen={sidebarOpen} onClose={closeSidebar} />
 
       <div className="flex-1 flex flex-col bg-gradient-to-b from-black to-blue-500">
-        {/* Header only on mobile/tablet */}
+   
         <div className="lg:hidden">
           <Header onMenuClick={openSidebar} />
         </div>
@@ -58,7 +58,6 @@ export default function MentionsLegalesPage() {
             </ul>
           </section>
 
-          {/* Propriété intellectuelle */}
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-white mb-4">Propriété Intellectuelle</h2>
             <p>
@@ -72,7 +71,7 @@ export default function MentionsLegalesPage() {
             </p>
           </section>
 
-          {/* Données personnelles */}
+   
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-white mb-4">Données Personnelles</h2>
             <p className="mb-2">
@@ -93,7 +92,6 @@ export default function MentionsLegalesPage() {
             </p>
           </section>
 
-          {/* Cookies */}
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-white mb-4">Cookies</h2>
             <p className="mb-2">
@@ -109,7 +107,7 @@ export default function MentionsLegalesPage() {
             </p>
           </section>
 
-          {/* Responsabilité et législation */}
+    
           <section className="mb-8">
             <h2 className="text-2xl font-semibold text-white mb-4">Responsabilité &amp; Législation</h2>
             <p>

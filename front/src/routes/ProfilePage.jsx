@@ -1,4 +1,4 @@
-// src/pages/ProfilePage.jsx
+
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useUser } from '../service/context.provider';
@@ -12,18 +12,15 @@ export default function ProfilePage() {
   const openSidebar = () => setSidebarOpen(true);
   const closeSidebar = () => setSidebarOpen(false);
 
-  // États des champs
   const [username, setUsername] = useState('');
   const [email, setEmail] = useState('');
   const [newEmail, setNewEmail] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
 
-  // Messages de retour
   const [infoMessage, setInfoMessage] = useState({ type: '', text: '' });
   const [passwordMessage, setPasswordMessage] = useState({ type: '', text: '' });
   const [emailMessage, setEmailMessage] = useState({ type: '', text: '' });
 
-  // Chargement initial des données utilisateur
   useEffect(() => {
     if (!connectedUserId) return;
     UserService.getUserById(connectedUserId)
@@ -36,7 +33,6 @@ export default function ProfilePage() {
       });
   }, [connectedUserId]);
 
-  // Mettre à jour username + email
   const handleUpdateInfo = e => {
     e.preventDefault();
     setInfoMessage({ type: '', text: '' });
@@ -51,7 +47,6 @@ export default function ProfilePage() {
       });
   };
 
-  // Envoyer lien de réinitialisation de mot de passe
   const handleSendResetLink = () => {
     setPasswordMessage({ type: '', text: '' });
     UserService.resetPassword({ email })
@@ -64,7 +59,7 @@ export default function ProfilePage() {
       });
   };
 
-  // Demande de confirmation de changement d’e-mail
+
   const handleRequestEmailChange = e => {
     e.preventDefault();
     setEmailMessage({ type: '', text: '' });
@@ -103,7 +98,7 @@ export default function ProfilePage() {
           >
             <h1 className="text-3xl font-bold text-white">Mon profil</h1>
 
-            {/* === Informations utilisateur === */}
+          
             <motion.form
               onSubmit={handleUpdateInfo}
               className="bg-white rounded-lg shadow-lg p-8 space-y-4"
@@ -139,7 +134,6 @@ export default function ProfilePage() {
               )}
             </motion.form>
 
-            {/* === Réinitialisation mot de passe === */}
             <motion.div
               className="bg-white rounded-lg shadow-lg p-8 text-center"
               whileHover={{ scale: 1.01 }}
@@ -163,7 +157,7 @@ export default function ProfilePage() {
               )}
             </motion.div>
 
-            {/* === Demande de changement d’e-mail === */}
+    
             <motion.form
               onSubmit={handleRequestEmailChange}
               className="bg-white rounded-lg shadow-lg p-8 space-y-4"

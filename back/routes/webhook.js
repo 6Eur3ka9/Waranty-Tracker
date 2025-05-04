@@ -1,10 +1,10 @@
-// back/routes/webhook.js
+
 require('dotenv').config();
 const express    = require('express');
 const Stripe     = require('stripe');
 const nodemailer = require('nodemailer');
 const router     = express.Router();
-const User       = require('../models/User'); // votre modèle Mongoose
+const User       = require('../models/User'); 
 
 const stripe         = new Stripe(process.env.STRIPE_SECRET_KEY);
 const endpointSecret = process.env.STRIPE_WEBHOOK_SECRET;
@@ -40,17 +40,17 @@ router.post(
         ? session.subscription_data.metadata.userId
         : session.metadata.userId;
 
-      // 1) upgrade user
+    
       await User.findByIdAndUpdate(userId, { plan: 'pro' });
 
-      // 2) récupérer la facture et son PDF
+   
       const invoice = await stripe.invoices.retrieve(
         session.subscription.invoice,
         { expand: ['invoice_pdf'] }
       );
       const pdfUrl = invoice.invoice_pdf;
 
-      // 3) envoyer le mail
+    
       await transporter.sendMail({
         from:    `"Warranty Tracker" <${process.env.SMTP_USER}>`,
         to:      session.customer_email,

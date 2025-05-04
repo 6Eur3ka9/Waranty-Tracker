@@ -1,4 +1,4 @@
-// src/pages/PaymentCancelPage.jsx
+
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
@@ -12,7 +12,7 @@ export default function PaymentCancelPage() {
     <div className="flex h-screen overflow-hidden">
       <Sidebar isOpen={false} onClose={() => {}} />
       <div className="flex-1 flex flex-col bg-gradient-to-b from-black to-blue-500">
-        {/* Header mobile/tablette */}
+       
         <div className="lg:hidden">
           <Header onMenuClick={() => {}} />
         </div>
@@ -24,7 +24,7 @@ export default function PaymentCancelPage() {
           transition={{ duration: 0.5 }}
         >
           <div className="bg-white rounded-xl shadow-xl p-10 max-w-sm w-full text-center space-y-6">
-            {/* Icône d’erreur */}
+  
             <svg
               className="mx-auto h-16 w-16 text-red-500"
               fill="none"

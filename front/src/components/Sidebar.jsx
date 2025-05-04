@@ -26,19 +26,19 @@ export default function Sidebar({ isOpen, onClose }) {
   const navigate = useNavigate();
   const location = useLocation();
 
-  // Récupère le plan utilisateur au chargement
+
   useEffect(() => {
     if (connectedUserToken && connectedUserId) {
       UserService.getUserById(connectedUserId)
         .then(res => {
-          setUserPlan(res.data.plan); // suppose un champ `plan` dans l'objet user
+          setUserPlan(res.data.plan);
         })
         .catch(console.error)
         .finally(() => {
           setLoadingPlan(false);
         });
     } else {
-      // pas connecté
+    
       setLoadingPlan(false);
     }
   }, [connectedUserToken, connectedUserId]);
@@ -66,13 +66,13 @@ export default function Sidebar({ isOpen, onClose }) {
 
   return (
     <>
-      {/* Sidebar desktop */}
+     
       <div className="hidden lg:flex lg:flex-col w-64 bg-white shadow-lg h-screen">
         <div className="p-6">
           <Link to="/" className="text-2xl font-bold text-blue-800">WT</Link>
         </div>
 
-        {/* Bouton Tracker Pro uniquement si non pro et une fois le plan chargé */}
+      
         {connectedUserToken && !loadingPlan && userPlan !== 'pro' && (
           <button
             onClick={() => navigate('/subscribe')}
@@ -107,7 +107,7 @@ export default function Sidebar({ isOpen, onClose }) {
         </div>
       </div>
 
-      {/* Sidebar mobile/tablette */}
+  
       <AnimatePresence>
         {isOpen && (
           <motion.aside
@@ -128,7 +128,7 @@ export default function Sidebar({ isOpen, onClose }) {
                 <button onClick={onClose}><HiX size={24} /></button>
               </div>
 
-              {/* Margin-top ajouté pour mobile/tablette, et condition idem */}
+             
               {connectedUserToken && !loadingPlan && userPlan !== 'pro' && (
                 <button
                   onClick={() => { onClose(); navigate('/subscribe'); }}

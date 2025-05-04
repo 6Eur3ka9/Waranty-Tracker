@@ -5,6 +5,7 @@ import { useUser } from '../service/context.provider';
 import { UserService } from '../service/user.service';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import MainImage from '../assets/log.png'; 
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -16,7 +17,7 @@ export default function LoginPage() {
     e.preventDefault();
     try {
       const { data } = await UserService.login({ email, password });
-      // On stocke token + userId
+   
       localStorage.setItem('userToken', data.token);
       localStorage.setItem('userId', data.userId);
       setConnectedUserToken(data.token);
@@ -32,7 +33,7 @@ export default function LoginPage() {
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-black to-blue-500">
       <Header />
       <div className="flex-1 flex flex-col lg:flex-row items-center justify-center px-6 lg:px-20 py-16">
-        {/* Illustration desktop */}
+     
         <motion.div
           className="hidden lg:flex flex-1 justify-center"
           initial={{ x: -50, opacity: 0 }}
@@ -40,11 +41,11 @@ export default function LoginPage() {
           transition={{ duration: 0.6 }}
         >
           <div className="border border-gray-300 border-dashed rounded-lg h-80 w-80 flex items-center justify-center bg-white">
-            <span className="text-gray-500">Image Placeholder</span>
+            <img src={MainImage} alt="Main" className="h-80 w-80 object-cover rounded-lg" />
           </div>
         </motion.div>
 
-        {/* Formulaire */}
+    
         <motion.div
           className="bg-white border border-gray-200 rounded-lg shadow-lg p-8 w-full max-w-md mx-auto"
           initial={{ y: 50, opacity: 0 }}

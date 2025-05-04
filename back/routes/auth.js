@@ -73,7 +73,7 @@ router.post('/register', async (req, res) => {
 router.get('/user/:userid', async (req, res) => {
   const { userid } = req.params;
   try {
-    const user = await User.findById(userid).select('-password'); // Exclude password field
+    const user = await User.findById(userid).select('-password');
     if (!user) {
       return res.status(404).json({ error: 'User not found' });
     }
@@ -176,12 +176,12 @@ router.put('/edit/email', async (req, res) => {
 });
 
 router.post('/upload', upload.single('file'), async (req, res) => {
-  const { userId } = req.body; // 'userId' est envoyé dans le formData
+  const { userId } = req.body;
   try {
     if (!userId || !req.file) {
       return res.status(400).json({ error: 'Invalid input' });
     }
-    // req.file.path contient l'URL secure fournie par Cloudinary grâce à CloudinaryStorage.
+   
     const newImage = new UserImage({
       user: userId,
       url: req.file.path, 
@@ -218,24 +218,22 @@ router.post('/forgot-password', async (req, res) => {
     return res.status(400).json({ error: 'L’e-mail est requis' });
   }
 
-  // 1) Vérifier que l’utilisateur existe
   const user = await User.findOne({ email });
   if (!user) {
-    // on ne révèle pas qu'il n'existe pas
+   
     return res.json({ resetLink: null });
   }
 
-  // 2) Générer un token de reset
+
   const token = jwt.sign(
     { id: user._id },
     process.env.JWT_RESET_SECRET,
     { expiresIn: '1h' }
   );
 
-  // 3) Construire le lien
   const resetLink = `${process.env.FRONT_URL}/reset-password?token=${token}`;
 
-  // **4) Envoyer l’e-mail via Nodemailer**  
+
   try {
     await sendMail({
       to: user.email,
@@ -252,7 +250,7 @@ router.post('/forgot-password', async (req, res) => {
     
   }
 
-  // 5) Répondre
+
   res.json({ resetLink });
 });
 
@@ -265,13 +263,12 @@ router.post('/reset-password', async (req, res) => {
   }
 
   try {
-    // 1) Vérifier et décoder le token
+
     const payload = jwt.verify(token, process.env.JWT_RESET_SECRET);
 
-    // 2) Hasher le nouveau mot de passe
+
     const hashedPassword = await bcrypt.hash(password, 10);
 
-    // 3) Mettre à jour l’utilisateur
     await User.findByIdAndUpdate(payload.id, { password: hashedPassword });
 
     return res.json({ message: 'Mot de passe réinitialisé avec succès' });
@@ -353,7 +350,7 @@ router.post('payment/create-subscription', authenticate, async (req, res) => {
     if (!userId || !subscriptionType) {
       return res.status(400).json({ error: 'Tous les champs sont requis' });
     }
-    // Logique de création d'abonnement ici
+  
     res.status(201).json({ message: 'Abonnement créé avec succès' });
   } catch (error) {
     console.error(error);
@@ -364,9 +361,8 @@ router.post('payment/create-subscription', authenticate, async (req, res) => {
 router.post('/payment/create-payment-intent', authenticate, async (req, res) => {
   try {
     let { amount, currency } = req.body;
-    amount = Math.trunc(amount); // montant en centimes
+    amount = Math.trunc(amount);
 
-    // Création sans return_url ni confirmation
     const paymentIntent = await stripe.paymentIntents.create({
       amount,
       currency
@@ -381,5 +377,30 @@ router.post('/payment/create-payment-intent', authenticate, async (req, res) => 
     return res.status(500).json({ error: err.message });
   }
 });
+
+router.put(
+  '/edit/plan',
+  authenticate,
+  async (req, res) => {
+    const { userId, plan } = req.body;
+    if (!userId || !plan) {
+      return res.status(400).json({ error: 'userId et plan sont requis' });
+    }
+    try {
+      const updated = await User.findByIdAndUpdate(
+        userId,
+        { plan },
+        { new: true }
+      );
+      if (!updated) {
+        return res.status(404).json({ error: 'Utilisateur non trouvé' });
+      }
+      res.json({ message: 'Plan mis à jour', plan: updated.plan });
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ error: 'Erreur lors de la mise à jour du plan' });
+    }
+  }
+);
 
 module.exports = router;

@@ -1,4 +1,4 @@
-// back/routes/payment.js
+
 require('dotenv').config();
 const express = require('express');
 const stripe  = require('stripe')(process.env.STRIPE_SECRET_KEY);
@@ -6,13 +6,12 @@ const router  = express.Router();
 const authenticate = require('../middleware/authenticate');
 
 
-// POST /api/auth/payment/create-checkout-session
 router.post(
   '/payment/create-checkout-session',
 
   async (req, res) => {
     try {
-      // On récupère l’ID du price Stripe (price_…)
+   $
       const priceId   = process.env.STRIPE_PRICE_ID;
         const userId    = req.body.userId;
 

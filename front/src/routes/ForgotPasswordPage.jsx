@@ -1,4 +1,3 @@
-// src/pages/ForgotPasswordPage.jsx
 import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
@@ -25,7 +24,7 @@ export default function ForgotPasswordPage() {
           text: "Un lien de réinitialisation vient d'être envoyé à votre adresse e-mail."
         });
       } else {
-        // pour éviter de révéler si l'email existe ou pas
+   
         setMessage({
           type: 'success',
           text: "Si cette adresse existe, vous recevrez bientôt un e-mail de réinitialisation."

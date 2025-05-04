@@ -2,6 +2,7 @@ import React from 'react';
 import { motion } from 'framer-motion';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import MainImage from '../assets/main.png'; 
 
 export default function HomePage() {
   const cards = [
@@ -53,12 +54,12 @@ export default function HomePage() {
         </motion.div>
 
         <motion.div
-          className="flex-1 border border-gray-300 rounded-lg h-64 w-full lg:ml-8 flex items-center justify-center bg-white"
+          className="flex-1   rounded-lg h-70 w-full lg:ml-8 flex items-center justify-center "
           initial={{ scale: 0.8, opacity: 0 }}
           animate={{ scale: 1, opacity: 1 }}
           transition={{ duration: 0.6 }}
         >
-          <span className="text-gray-500">Image Placeholder</span>
+          <img src={MainImage} alt="Main" className="h-full  object-cover rounded-lg" />
         </motion.div>
       </main>
 

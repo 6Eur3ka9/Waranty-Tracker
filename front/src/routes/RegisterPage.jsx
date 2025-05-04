@@ -41,7 +41,7 @@ export default function RegisterPage() {
     <div className="flex flex-col min-h-screen bg-gradient-to-b from-black to-blue-500">
       <Header />
       <div className="flex-1 flex flex-col lg:flex-row items-center justify-center px-6 lg:px-20 py-16">
-        {/* Illustration desktop */}
+    
         <motion.div
           className="hidden lg:flex flex-1 justify-center"
           initial={{ x: -50, opacity: 0 }}
@@ -53,7 +53,6 @@ export default function RegisterPage() {
           </div>
         </motion.div>
 
-        {/* Formulaire */}
         <motion.div
           className="bg-white border border-gray-200 rounded-lg shadow-lg p-8 w-full max-w-md mx-auto"
           initial={{ y: 50, opacity: 0 }}

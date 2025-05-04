@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import { Navigate, Outlet, useNavigate } from 'react-router-dom';
 import { useUser } from '../service/context.provider';
 
-// petit parseur JWT maison
 function parseJwt(token) {
   if (!token) return null;
   const [ , payload ] = token.split('.');
@@ -59,7 +58,7 @@ export default function CheckAuth() {
     setConnectedUserPassword
   ]);
 
-  // Si jamais token manquant (et logout n’a pas encore eu lieu)
+ 
   if (!connectedUserToken) {
     return <Navigate to="/login" replace />;
   }

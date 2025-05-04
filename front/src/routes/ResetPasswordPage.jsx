@@ -1,4 +1,4 @@
-// src/pages/ResetPasswordPage.jsx
+
 import React, { useState } from 'react';
 import { useSearchParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';

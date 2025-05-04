@@ -1,4 +1,4 @@
-// src/pages/SubscribePage.jsx
+
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useUser } from '../service/context.provider';
@@ -56,7 +56,7 @@ export default function SubscribePage() {
       <Sidebar isOpen={sidebarOpen} onClose={closeSidebar} />
 
       <div className="flex-1 flex flex-col bg-gradient-to-b from-black to-blue-500">
-        {/* Header sur mobile/tablette */}
+  
         <div className="lg:hidden">
           <Header onMenuClick={openSidebar} />
         </div>
@@ -80,7 +80,7 @@ export default function SubscribePage() {
             <p className="text-white">Chargement…</p>
           ) : (
             <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
-              {/* Free Plan */}
+        
               <motion.div
                 className={`p-6 bg-white rounded-lg shadow-lg flex flex-col ${
                   plan === 'free' ? 'border-4 border-blue-600' : ''

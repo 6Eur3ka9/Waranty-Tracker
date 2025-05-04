@@ -73,7 +73,7 @@ export default function MainPage() {
           animate={{ opacity: 1 }}
           transition={{ duration: 0.8 }}
         >
-          {/* Hero */}
+        
           <motion.section
             className="mb-12"
             initial={{ x: -50, opacity: 0 }}

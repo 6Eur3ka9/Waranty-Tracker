@@ -1,4 +1,4 @@
-// src/pages/MyWarrantyPage.jsx
+
 import React, { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { format, differenceInDays, parseISO, compareAsc, compareDesc } from 'date-fns';
@@ -13,7 +13,7 @@ export default function MyWarrantyPage() {
   const [warranties, setWarranties] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
-  const [sortOrder, setSortOrder] = useState(''); // 'asc' ou 'desc'
+  const [sortOrder, setSortOrder] = useState(''); 
   const [editingId, setEditingId] = useState(null);
   const [editData, setEditData] = useState({
     productName: '',
@@ -24,7 +24,7 @@ export default function MyWarrantyPage() {
   const openSidebar = () => setSidebarOpen(true);
   const closeSidebar = () => setSidebarOpen(false);
 
-  // Charger les garanties
+
   useEffect(() => {
     if (!connectedUserToken) return;
     setLoading(true);
@@ -46,7 +46,6 @@ export default function MyWarrantyPage() {
       .finally(() => setLoading(false));
   }, [connectedUserToken, sortOrder]);
 
-  // Supprimer une garantie
   const handleDelete = id => {
     WarrantyService.deleteWarranty(id)
       .then(() => {
@@ -58,7 +57,6 @@ export default function MyWarrantyPage() {
       });
   };
 
-  // Passer en mode édition
   const startEdit = w => {
     setEditingId(w._id);
     setEditData({
@@ -68,7 +66,7 @@ export default function MyWarrantyPage() {
     });
   };
 
-  // Sauver les modifications
+
   const saveEdit = id => {
     
     WarrantyService.editWarranty(id, editData)
@@ -104,7 +102,7 @@ export default function MyWarrantyPage() {
             Mes garanties
           </motion.h1>
 
-          {/* Contrôle de tri */}
+      
           <div className="flex justify-end mb-4">
             <label className="text-white mr-2">Trier par expiration :</label>
             <select
