@@ -383,6 +383,8 @@ router.put(
   authenticate,
   async (req, res) => {
     const { userId, plan } = req.body;
+    console.log('Plan:', plan , 'UserId:', userId);
+    
     if (!userId || !plan) {
       return res.status(400).json({ error: 'userId et plan sont requis' });
     }
@@ -395,7 +397,7 @@ router.put(
       if (!updated) {
         return res.status(404).json({ error: 'Utilisateur non trouvé' });
       }
-      res.json({ message: 'Plan mis à jour', plan: updated.plan });
+     return res.json({ message: 'Plan mis à jour', plan: updated.plan,  });
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: 'Erreur lors de la mise à jour du plan' });

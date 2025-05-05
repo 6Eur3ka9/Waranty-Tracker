@@ -11,7 +11,7 @@ router.post(
 
   async (req, res) => {
     try {
-   $
+   
       const priceId   = process.env.STRIPE_PRICE_ID;
         const userId    = req.body.userId;
 
@@ -25,8 +25,9 @@ router.post(
         subscription_data: {
           metadata: { userId }
         },
-        success_url: `${process.env.FRONT_URL}/succes`,
-        cancel_url:  `${process.env.FRONT_URL}/cancel`
+        success_url: `${process.env.FRONTEND_URL}/succes?session_id={CHECKOUT_SESSION_ID}`,
+        cancel_url:  `${process.env.FRONTEND_URL}/cancel?session_id={CHECKOUT_SESSION_ID}`,
+        
       });
 
       res.json({ id: session.id });

@@ -64,8 +64,10 @@ const sendResetLink = () => {
   }
 
   const editPlan = (data) => {
-
-      AxiosClient.put('/edit/plan', data);
+    const token = localStorage.getItem("userToken");
+    console.log("token", token);
+    
+     return AxiosClient.put('/edit/plan', data, { headers: { Authorization: `Bearer ${token}` } });
   }
 
 export const UserService = {

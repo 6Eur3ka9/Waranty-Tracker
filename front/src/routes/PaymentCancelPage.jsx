@@ -1,12 +1,24 @@
 
-import React from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
 
 export default function PaymentCancelPage() {
-  const navigate = useNavigate();
+  const [searchParams] = useSearchParams();
+  const sessionId      = searchParams.get('session_id');
+  const navigate       = useNavigate();
+
+
+  
+  useEffect(() => {
+   
+    
+    if (!sessionId) {
+      navigate('/', { replace: true });
+    }
+  }, [sessionId, navigate]);
 
   return (
     <div className="flex h-screen overflow-hidden">

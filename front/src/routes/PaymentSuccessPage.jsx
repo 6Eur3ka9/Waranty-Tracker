@@ -1,6 +1,6 @@
 
 import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import Sidebar from '../components/Sidebar';
 import Header  from '../components/Header';
@@ -8,24 +8,41 @@ import { useUser } from '../service/context.provider';
 import { UserService } from '../service/user.service';
 
 export default function PaymentSuccessPage() {
-  const { connectedUserId, setUserPlan } = useUser();
+  const { connectedUserId } = useUser();
   const [loading, setLoading] = useState(true);
+  const [searchParams] = useSearchParams();
+  const sessionId      = searchParams.get('session_id');
   const navigate = useNavigate();
 
   useEffect(() => {
-  
+    console.log(sessionId);
+    
+    if (!sessionId) {
+     
+      navigate('/', { replace: true });
+      return;
+    }
     if (!connectedUserId) {
       setLoading(false);
       return;
     }
-    UserService.editPlan({ userId: connectedUserId, plan: 'pro' })
+    console.log(sessionId);
+    
+    const data = {
+      userId: connectedUserId,
+      plan: 'pro'
+    };
+    console.log('data:', data);
+    
+    UserService.editPlan(data)
       .then(res => {
-     
-        setUserPlan(res.plan);
+      
+        
+        setTimeout(() => navigate('/home'), 3000);
       })
       .catch(err => console.error('Erreur editPlan:', err))
-      .finally(() => setLoading(false));
-  }, [connectedUserId, setUserPlan]);
+     
+  }, [connectedUserId, navigate]);
 
   return (
     <div className="flex h-screen overflow-hidden">
