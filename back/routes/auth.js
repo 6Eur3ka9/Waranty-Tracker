@@ -25,7 +25,7 @@ const storage = new CloudinaryStorage({
     folder: 'pictures',
     allowed_formats: ['jpg', 'png', 'jpeg'],
     public_id: (req, file) => {
-      return file.originalname.split('.')[0] + Date.now(); 
+      return file.originalname.split('.')[0] + Date.now();
     },
   },
 });
@@ -34,7 +34,7 @@ const upload = multer({ storage: storage });
 
 router.post('/register', async (req, res) => {
   const { username, email, password, date } = req.body;
-    const created_at = new Date();
+  const created_at = new Date();
   try {
     if (!username || !email || !password) {
       return res.status(400).json({ error: 'All fields are required' });
@@ -44,7 +44,7 @@ router.post('/register', async (req, res) => {
     if (existingUser) {
       return res.status(400).json({ error: 'Email or username already exists' });
     }
-    
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const newUser = new User({
       username,
@@ -56,7 +56,7 @@ router.post('/register', async (req, res) => {
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
       expiresIn: '1h',
     });
-  
+
 
     await newUser.save();
     res.status(201).json({
@@ -64,6 +64,58 @@ router.post('/register', async (req, res) => {
       token,
       userId: newUser._id,
     });
+
+    try {
+      const frontendUrl = process.env.FRONT_URL;
+      await sendMail({
+        to: email,
+        subject: 'Bienvenue chez Warranty Tracker !',
+
+        html: `
+           <div style="
+    font-family: Arial, sans-serif;
+    color: #333;
+    line-height: 1.5;
+    max-width: 600px;
+    margin: auto;
+    padding: 20px;
+  ">
+    <h2 style="color: #1E3A8A;">Bienvenue chez Warranty Tracker ! 🎉</h2>
+    <p>Bonjour ${username},</p>
+    <p>Merci de nous avoir rejoints ! Votre compte a bien été créé, vous pouvez désormais :</p>
+    <ul style="margin: 0 0 20px 20px;">
+      <li>Suivre jusqu’à 3 garanties gratuitement</li>
+      <li>Recevoir des alertes avant expiration</li>
+      <li>Bénéficier d’un suivi illimité pour seulement 0,99 €/mois</li>
+    </ul>
+    <p style="text-align: center; margin: 30px 0;">
+      <a
+        href="${frontendUrl}/login"
+        style="
+          display: inline-block;
+          background-color: #1E3A8A;
+          color: #fff;
+          text-decoration: none;
+          padding: 12px 24px;
+          border-radius: 6px;
+          font-weight: bold;
+        "
+      >
+        Se connecter
+      </a>
+    </p>
+    <p>Si vous avez la moindre question, n’hésitez pas à nous contacter à <a href="mailto:warantytracker@gmail.com">warantytracker@gmail.com</a>.</p>
+    <p>À très bientôt,<br>L’équipe Warranty Tracker</p>
+  </div>
+`
+
+      });
+    } catch (err) {
+      console.error('Erreur envoi mail reset-password:', err);
+
+    }
+
+
   } catch (error) {
     res.status(500).json({ error: 'Error registering user' });
     console.error(error);
@@ -99,7 +151,7 @@ router.put('/login', async (req, res) => {
       return res.status(401).json({ error: 'Invalid email or password' });
     }
     console.log('userid is:', user._id);
-    
+
     const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
     res.status(200).json({ message: 'Login successful', token, userId: user._id });
   } catch (error) {
@@ -114,7 +166,7 @@ router.put('/edit/username', async (req, res) => {
     if (!userId || !username) {
       return res.status(400).json({ error: 'rentrer un nom d\'utilisateur valide' });
     }
-  
+
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { username, },
@@ -136,12 +188,12 @@ router.put('/edit/password', async (req, res) => {
     if (!userId || !password) {
       return res.status(400).json({ error: 'rentrer un mot de passe valide' });
     }
-  
+
     const hashedPassword = await bcrypt.hash(password, 10);
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { password: hashedPassword },
-      { new: true , runValidators: true, context: 'query' }
+      { new: true, runValidators: true, context: 'query' }
     );
     if (!updatedUser) {
       return res.status(404).json({ error: 'User not found' });
@@ -159,7 +211,7 @@ router.put('/edit/email', async (req, res) => {
     if (!userId || !email) {
       return res.status(400).json({ error: 'Veuillez rentrer un email valide' });
     }
-  
+
     const updatedUser = await User.findByIdAndUpdate(
       userId,
       { email },
@@ -181,18 +233,18 @@ router.post('/upload', upload.single('file'), async (req, res) => {
     if (!userId || !req.file) {
       return res.status(400).json({ error: 'Invalid input' });
     }
-   
+
     const newImage = new UserImage({
       user: userId,
-      url: req.file.path, 
+      url: req.file.path,
     });
-    
+
     await newImage.save();
-    res.status(201).json({ 
-      message: 'Image uploaded and added successfully', 
-      imageUrl: req.file.path 
+    res.status(201).json({
+      message: 'Image uploaded and added successfully',
+      imageUrl: req.file.path
     });
-    
+
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Error uploading image' });
@@ -220,7 +272,7 @@ router.post('/forgot-password', async (req, res) => {
 
   const user = await User.findOne({ email });
   if (!user) {
-   
+
     return res.json({ resetLink: null });
   }
 
@@ -247,7 +299,7 @@ router.post('/forgot-password', async (req, res) => {
     });
   } catch (err) {
     console.error('Erreur envoi mail reset-password:', err);
-    
+
   }
 
 
@@ -288,7 +340,7 @@ router.post('/warranty/add', authenticate, async (req, res) => {
     if (!productName || !purchaseDate || !expiryDate) {
       return res.status(400).json({ error: 'Tous les champs sont requis' });
     }
-   
+
     const newWaranty = new Warantytracker({
       productName, purchaseDate, expiryDate, user: userId
     });
@@ -350,7 +402,7 @@ router.post('payment/create-subscription', authenticate, async (req, res) => {
     if (!userId || !subscriptionType) {
       return res.status(400).json({ error: 'Tous les champs sont requis' });
     }
-  
+
     res.status(201).json({ message: 'Abonnement créé avec succès' });
   } catch (error) {
     console.error(error);
@@ -383,8 +435,8 @@ router.put(
   authenticate,
   async (req, res) => {
     const { userId, plan } = req.body;
-    console.log('Plan:', plan , 'UserId:', userId);
-    
+    console.log('Plan:', plan, 'UserId:', userId);
+
     if (!userId || !plan) {
       return res.status(400).json({ error: 'userId et plan sont requis' });
     }
@@ -397,7 +449,7 @@ router.put(
       if (!updated) {
         return res.status(404).json({ error: 'Utilisateur non trouvé' });
       }
-     return res.json({ message: 'Plan mis à jour', plan: updated.plan,  });
+      return res.json({ message: 'Plan mis à jour', plan: updated.plan, });
     } catch (err) {
       console.error(err);
       res.status(500).json({ error: 'Erreur lors de la mise à jour du plan' });

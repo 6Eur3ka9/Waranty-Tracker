@@ -13,6 +13,7 @@ export default function SubscribePage() {
   const { connectedUserId, connectedUserToken, setConnectedUserToken } = useUser();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [plan, setPlan] = useState('free');
+  const [userEmail, setUserEmail] = useState('');
   const [loading, setLoading] = useState(true);
   const [message, setMessage] = useState({ type: '', text: '' });
 
@@ -26,6 +27,7 @@ export default function SubscribePage() {
     UserService.getUserById(connectedUserId)
       .then(res => {
         setPlan(res.data.plan || 'free');
+        setUserEmail(res.data.email || '');
       })
       .catch(console.error)
       .finally(() => setLoading(false));
@@ -37,6 +39,7 @@ export default function SubscribePage() {
     const body = {
       userId: connectedUserId,
       plan: 'pro',
+      email: userEmail
     };
 
     PaymentService.createCheckoutSession(body)

@@ -14,11 +14,13 @@ router.post(
    
       const priceId   = process.env.STRIPE_PRICE_ID;
         const userId    = req.body.userId;
+      const email = req.body.email;
 
 
       const session = await stripe.checkout.sessions.create({
         mode: 'subscription',
         payment_method_types: ['card'],
+        customer_email: email,
          
         line_items: [{ price: priceId, quantity: 1 }],
         

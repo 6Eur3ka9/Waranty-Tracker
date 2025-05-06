@@ -5,7 +5,7 @@ import { useUser } from '../service/context.provider';
 import { UserService } from '../service/user.service';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import MainImage from '../assets/log.png'; 
+import Regex from '../assets/regex.png'; 
 
 export default function LoginPage() {
   const [email, setEmail] = useState('');
@@ -40,9 +40,9 @@ export default function LoginPage() {
           animate={{ x: 0, opacity: 1 }}
           transition={{ duration: 0.6 }}
         >
-          <div className="border border-gray-300 border-dashed rounded-lg h-80 w-80 flex items-center justify-center bg-white">
-            <img src={MainImage} alt="Main" className="h-80 w-80 object-cover rounded-lg" />
-          </div>
+          <div className=" h-120 w-150 flex items-center justify-center ">
+                      <img src={Regex} alt="Regex" className="h-full w-full  rounded-lg" />
+                    </div>
         </motion.div>
 
     
