@@ -3,12 +3,14 @@ import { motion } from 'framer-motion';
 import Header from '../components/Header';
 import Sidebar from '../components/Sidebar';
 import { UserService } from '../service/user.service';
+import { useNavigate } from 'react-router-dom';
 
 export default function MainPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const openSidebar = () => setSidebarOpen(true);
   const closeSidebar = () => setSidebarOpen(false);
   const [username, setUsername] = useState('');
+  const navigate = useNavigate();
 
   const cards = [
     {
@@ -107,8 +109,8 @@ export default function MainPage() {
                   <p className="text-gray-600">{card.desc}</p>
                 </div>
                 <a
-                  href={card.link}
-                  className="mt-4 inline-block text-blue-600 hover:underline font-medium"
+                   onClick={() => {  navigate(`${card.link}`); }}
+                  className="mt-4 inline-block text-blue-600 hover:underline font-medium cursor-pointer"
                 >
                   {card.label}
                 </a>

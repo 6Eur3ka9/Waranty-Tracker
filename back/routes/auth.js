@@ -54,7 +54,7 @@ router.post('/register', async (req, res) => {
     });
 
     const token = jwt.sign({ id: newUser._id }, process.env.JWT_SECRET, {
-      expiresIn: '1h',
+      expiresIn: '2h',
     });
 
 
@@ -227,29 +227,7 @@ router.put('/edit/email', async (req, res) => {
   }
 });
 
-router.post('/upload', upload.single('file'), async (req, res) => {
-  const { userId } = req.body;
-  try {
-    if (!userId || !req.file) {
-      return res.status(400).json({ error: 'Invalid input' });
-    }
 
-    const newImage = new UserImage({
-      user: userId,
-      url: req.file.path,
-    });
-
-    await newImage.save();
-    res.status(201).json({
-      message: 'Image uploaded and added successfully',
-      imageUrl: req.file.path
-    });
-
-  } catch (error) {
-    console.error(error);
-    res.status(500).json({ error: 'Error uploading image' });
-  }
-});
 
 
 router.post('/profile/send-reset-password', authenticate, async (req, res) => {
@@ -332,20 +310,21 @@ router.post('/reset-password', async (req, res) => {
   }
 });
 
-router.post('/warranty/add', authenticate, async (req, res) => {
-  const { productName, purchaseDate, expiryDate, token } = req.body;
+router.post('/warranty/add', upload.single('file'), authenticate, async (req, res) => {
+  const { productName, purchaseDate, expiryDate } = req.body;
+  const file = req.file;
   const userId = req.user.id;
-
+  
   try {
-    if (!productName || !purchaseDate || !expiryDate) {
+    if (!productName || !purchaseDate || !expiryDate || !file) {
       return res.status(400).json({ error: 'Tous les champs sont requis' });
     }
 
     const newWaranty = new Warantytracker({
-      productName, purchaseDate, expiryDate, user: userId
+      productName, purchaseDate, expiryDate, user: userId, url: file.path
     });
     await newWaranty.save();
-    res.status(201).json({ message: 'Produit ajouté avec succès', waranty: newWaranty });
+    res.status(201).json({ message: 'Produit ajouté avec succès', waranty: newWaranty , image: file.path});
   } catch (error) {
     console.error(error);
     res.status(500).json({ error: 'Erreur lors de l\'ajout du produit' });

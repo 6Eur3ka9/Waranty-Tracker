@@ -19,6 +19,10 @@ const WarrantyProductSchema = new Schema({
     type: Boolean,
     default: false
   },
+  url: {
+    type : String,
+    required: true,
+  },
   user: {
     type: Schema.Types.ObjectId,
     ref: 'User',
