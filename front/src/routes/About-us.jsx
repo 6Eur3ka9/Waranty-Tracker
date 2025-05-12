@@ -20,9 +20,13 @@ export default function AboutUsPage() {
             )}
 
       <div className="flex-1 flex flex-col bg-gradient-to-b from-black to-blue-500">
-        <div className="lg:hidden">
-          <Header onMenuClick={openSidebar} />
-        </div>
+        {userId ? (
+                  <div className="lg:hidden">
+                    <Header onMenuClick={openSidebar} />
+                  </div>
+                ) : (
+                  <Header onMenuClick={openSidebar} />
+                )}
 
         <motion.main
           className="flex-1 overflow-auto px-6 lg:px-20 py-12"

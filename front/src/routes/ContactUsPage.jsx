@@ -44,11 +44,15 @@ export default function ContactUsPage() {
       ) : (
         <div></div>
       )}
-      <div className="flex-1 flex flex-col bg-gradient-to-b from-black to-blue-500">
+      <div className="flex-1 flex flex-col bg-gradient-to-b from-black to-blue-500 overflow-auto">
 
-     <div className="lg:hidden">
+     {userId ? (
+               <div className="lg:hidden">
+                 <Header onMenuClick={openSidebar} />
+               </div>
+             ) : (
                <Header onMenuClick={openSidebar} />
-             </div>
+             )}
       <motion.main
         className="flex-1 flex items-center justify-center px-6 lg:px-20 py-16"
         initial={{ opacity: 0 }}
