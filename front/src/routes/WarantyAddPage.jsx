@@ -140,9 +140,9 @@ export default function AddWarrantyPage() {
                 </label>
               </div>
               {preview && (
-                <div className="mt-4 flex items-center space-x-4 border p-2">
+                <div className="mt-4 flex items-center space-x-4 border-[0.2px] rounded-sm p-2">
                   <img src={preview} alt="aperçu" className="h-10 object-cover rounded shadow" />
-                  <button type="button" onClick={removeFile} className="text-red-600">
+                  <button type="button" onClick={removeFile} className="text-red-600 cursor-pointer">
                     <HiX size={20} />
                   </button>
                 </div>

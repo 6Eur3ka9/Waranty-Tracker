@@ -18,7 +18,7 @@ export default function Header({ onMenuClick }) {
   return (
     <header className="flex items-center justify-between bg-white px-4 py-3 shadow-md md:px-8">
       <div className="flex items-center">
-        <button className="md:hidden mr-4" onClick={onMenuClick}>
+        <button className="lg:hidden mr-4" onClick={onMenuClick}>
           <HiMenu size={24} />
         </button>
         <Link to="/" className="text-xl font-bold text-blue-800">

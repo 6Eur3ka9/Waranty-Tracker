@@ -19,6 +19,7 @@ import MentionsLegalesPage   from './routes/MentionsLegalesPage';
 import PaymentSuccessPage    from './routes/PaymentSuccessPage';
 import PaymentCancelPage     from './routes/PaymentCancelPage';
 import ContactUsPage from './routes/ContactUsPage';
+import AboutUsPage from './routes/About-us';
 
 export default function App() {
   return (
@@ -40,6 +41,7 @@ export default function App() {
             <Route path="/cancel"           element={<PaymentCancelPage />} />
             <Route path="/legalmentions"    element={<MentionsLegalesPage />} />
             <Route path='/contact-us'        element={<ContactUsPage />} />
+            <Route path='/about-us'         element={<AboutUsPage />} />
 
           {/* PROTÉGÉ */}
           <Route element={<CheckAuth />}>

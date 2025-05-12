@@ -3,16 +3,21 @@ import { motion } from 'framer-motion';
 import emailjs from '@emailjs/browser';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
+import Sidebar from '../components/Sidebar';
 
 export default function ContactUsPage() {
   const formRef = useRef();
   const [status, setStatus] = useState({ type: '', text: '' });
   const [loading, setLoading] = useState(false);
+  const [sidebarOpen, setSidebarOpen] = useState(false);
+  const openSidebar = () => setSidebarOpen(true);
+  const closeSidebar = () => setSidebarOpen(false);
+  const [userId, setUserId] = useState(localStorage.getItem('userId'));
 
 
-  const SERVICE_ID  = import.meta.env.VITE_EMAILJS_SERVICE_ID;
+  const SERVICE_ID = import.meta.env.VITE_EMAILJS_SERVICE_ID;
   const TEMPLATE_ID = import.meta.env.VITE_EMAILJS_TEMPLATE_ID;
-  const PUBLIC_KEY  = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
+  const PUBLIC_KEY = import.meta.env.VITE_EMAILJS_PUBLIC_KEY;
 
   const handleSubmit = e => {
     e.preventDefault();
@@ -33,9 +38,17 @@ export default function ContactUsPage() {
   };
 
   return (
-    <div className="flex flex-col min-h-screen bg-gradient-to-b from-black to-blue-500">
-      <Header />
+    <div className="flex h-screen overflow-hidden">
+      {userId ? (
+        <Sidebar isOpen={sidebarOpen} onClose={closeSidebar} />
+      ) : (
+        <div></div>
+      )}
+      <div className="flex-1 flex flex-col bg-gradient-to-b from-black to-blue-500">
 
+     <div className="lg:hidden">
+               <Header onMenuClick={openSidebar} />
+             </div>
       <motion.main
         className="flex-1 flex items-center justify-center px-6 lg:px-20 py-16"
         initial={{ opacity: 0 }}
@@ -112,17 +125,20 @@ export default function ContactUsPage() {
 
           {status.text && (
             <p
-              className={`mt-4 text-center text-sm ${
-                status.type === 'success' ? 'text-green-500' : 'text-red-500'
-              }`}
+              className={`mt-4 text-center text-sm ${status.type === 'success' ? 'text-green-500' : 'text-red-500'
+                }`}
             >
               {status.text}
             </p>
           )}
         </motion.section>
       </motion.main>
-
-      <Footer />
+{userId ? (
+  <div></div>
+) : (
+  <Footer />
+)}
+</div>
     </div>
   );
 }

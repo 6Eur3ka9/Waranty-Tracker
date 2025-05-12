@@ -11,7 +11,7 @@ export default function Footer() {
         <Link to="/legalmentions" className="hover:underline">
           Mentions légales
         </Link>
-        <Link to="/aboutus" className="hover:underline">
+        <Link to="/about-us" className="hover:underline">
           Qui sommes nous
         </Link>
       </div>

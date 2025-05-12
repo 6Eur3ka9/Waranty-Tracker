@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { motion } from 'framer-motion';
 import Sidebar from '../components/Sidebar';
 import Header from '../components/Header';
+import Footer from '../components/Footer';
 
 export default function MentionsLegalesPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -18,10 +19,12 @@ export default function MentionsLegalesPage() {
        <div></div>
       )}
 
-      <div className="w-full bg-gradient-to-b from-black to-blue-500 overflow-auto">
+<div className="flex-1 flex flex-col bg-gradient-to-b from-black to-blue-500 overflow-auto">
 
-          <Header onMenuClick={openSidebar} />
-        <div className=' bg-gray-100 mt-10 mx-50 rounded-2xl'>
+          <div className="lg:hidden">
+                    <Header onMenuClick={openSidebar} />
+                  </div>
+        <div className=' bg-gray-100 my-10 lg:mx-[10%] mx-[5%] rounded-2xl '>
 
        
    
@@ -131,6 +134,11 @@ export default function MentionsLegalesPage() {
           </section>
         </motion.main>
             </div>
+            {userId ? (
+                    <div></div>
+                  ) : (
+                    <Footer />
+                  )}
       </div>
     </div>
   );

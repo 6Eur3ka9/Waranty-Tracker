@@ -103,7 +103,7 @@ export default function Sidebar({ isOpen, onClose }) {
         <div className="px-4 py-4 border-t">
           <Link to="/contact-us" className="block text-sm text-gray-600 hover:underline mb-2">Nous contacter</Link>
           <Link to="/legalmentions" className="block text-sm text-gray-600 hover:underline mb-2">Mentions légales</Link>
-          <Link to="/aboutus" className="block text-sm text-gray-600 hover:underline">Qui sommes nous</Link>
+          <Link to="/about-us" className="block text-sm text-gray-600 hover:underline">Qui sommes nous</Link>
         </div>
       </div>
 
