@@ -18,6 +18,7 @@ import SubscribePage         from './routes/SubscribePage';
 import MentionsLegalesPage   from './routes/MentionsLegalesPage';
 import PaymentSuccessPage    from './routes/PaymentSuccessPage';
 import PaymentCancelPage     from './routes/PaymentCancelPage';
+import ContactUsPage from './routes/ContactUsPage';
 
 export default function App() {
   return (
@@ -39,12 +40,14 @@ export default function App() {
 
           {/* PROTÉGÉ */}
           <Route element={<CheckAuth />}>
+            
             <Route path="/home"             element={<MainPage />} />
             <Route path="/profile"          element={<ProfilePage />} />
             <Route path="/add-warranty"     element={<WarantyAddPage />} />
             <Route path="/warranty"         element={<MyWarrantyPage />} />
             <Route path="/subscribe"        element={<SubscribePage />} />
             <Route path="/legalmentions"    element={<MentionsLegalesPage />} />
+            <Route path='/contact-us'        element={<ContactUsPage />} />
           </Route>
           {/* 404 */}
            <Route path="*" element={<Navigate to="/home" replace />} />
