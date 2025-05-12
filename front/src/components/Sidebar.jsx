@@ -58,7 +58,7 @@ export default function Sidebar({ isOpen, onClose }) {
   ];
 
   const linkClass = path => {
-    const base = "flex items-center px-4 py-2 rounded-md text-gray-700 hover:bg-gray-100 transition";
+    const base = "flex items-center px-4 py-2 rounded-md text-gray-700 hover:bg-gray-100  transition";
     return location.pathname === path
       ? `${base} border-l-4 border-blue-500 bg-gray-100`
       : base;
@@ -153,7 +153,7 @@ export default function Sidebar({ isOpen, onClose }) {
                 <li>
                   <button
                     onClick={() => { onClose(); handleLogout(); }}
-                    className="w-full text-left flex items-center px-4 py-2 text-red-600 hover:bg-gray-100 rounded-md"
+                    className="w-full text-left flex items-center px-4 py-2 text-red-600 hover:bg-gray-100 rounded-md cursor-pointer"
                   >
                     <HiX className="inline mr-2" /> Déconnexion
                   </button>

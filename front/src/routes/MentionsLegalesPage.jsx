@@ -8,28 +8,36 @@ export default function MentionsLegalesPage() {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const openSidebar = () => setSidebarOpen(true);
   const closeSidebar = () => setSidebarOpen(false);
+  const [userId, setUserId] = useState(localStorage.getItem('userId'));
 
   return (
     <div className="flex h-screen overflow-hidden">
-      <Sidebar isOpen={sidebarOpen} onClose={closeSidebar} />
+      {userId ? (
+        <Sidebar isOpen={sidebarOpen} onClose={closeSidebar} />
+      ) : (
+       <div></div>
+      )}
 
-      <div className="flex-1 flex flex-col bg-gradient-to-b from-black to-blue-500">
-   
-        <div className="lg:hidden">
+      <div className="w-full bg-gradient-to-b from-black to-blue-500 overflow-auto">
+
           <Header onMenuClick={openSidebar} />
-        </div>
+        <div className=' bg-gray-100 mt-10 mx-50 rounded-2xl'>
+
+       
+   
+       
+  
 
         <motion.main
-          className="flex-1 overflow-auto p-6 lg:p-20 text-gray-100 max-w-4xl mx-auto"
+          className="flex-1 overflow-auto p-6 lg:p-20  max-w-4xl mx-auto"
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
         >
-          <h1 className="text-3xl font-bold text-white mb-8">Mentions Légales</h1>
+          <h1 className="text-3xl font-bold  mb-8">Mentions Légales</h1>
 
-          {/* Éditeur du site */}
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-white mb-4">Éditeur du site</h2>
+            <h2 className="text-2xl font-semibold  mb-4">Éditeur du site</h2>
             <p className="mb-2">
               Le site <strong>Waranty Tracker</strong> est édité par :
             </p>
@@ -44,9 +52,9 @@ export default function MentionsLegalesPage() {
             </ul>
           </section>
 
-          {/* Hébergement */}
+       
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-white mb-4">Hébergement</h2>
+            <h2 className="text-2xl font-semibold  mb-4">Hébergement</h2>
             <p className="mb-2">
               Le présent site est hébergé par :
             </p>
@@ -59,7 +67,7 @@ export default function MentionsLegalesPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-white mb-4">Propriété Intellectuelle</h2>
+            <h2 className="text-2xl font-semibold mb-4">Propriété Intellectuelle</h2>
             <p>
               Tous les éléments (textes, photographies, logos, icônes,  
               vidéos, animations, sons, bases de données, etc.) présents  
@@ -73,7 +81,7 @@ export default function MentionsLegalesPage() {
 
    
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-white mb-4">Données Personnelles</h2>
+            <h2 className="text-2xl font-semibold  mb-4">Données Personnelles</h2>
             <p className="mb-2">
               Les données collectées via les formulaires (inscription,  
               contact, etc.) sont nécessaires au traitement de vos demandes.  
@@ -93,7 +101,7 @@ export default function MentionsLegalesPage() {
           </section>
 
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-white mb-4">Cookies</h2>
+            <h2 className="text-2xl font-semibold mb-4">Cookies</h2>
             <p className="mb-2">
               Ce site utilise des cookies et traceurs pour améliorer votre  
               expérience et réaliser des statistiques de visites. Vous pouvez  
@@ -109,7 +117,7 @@ export default function MentionsLegalesPage() {
 
     
           <section className="mb-8">
-            <h2 className="text-2xl font-semibold text-white mb-4">Responsabilité &amp; Législation</h2>
+            <h2 className="text-2xl font-semibold  mb-4">Responsabilité &amp; Législation</h2>
             <p>
               Waranty Tracker met tout en œuvre pour garantir la fiabilité  
               et la mise à jour des informations publiées, mais ne peut  
@@ -122,6 +130,7 @@ export default function MentionsLegalesPage() {
             </p>
           </section>
         </motion.main>
+            </div>
       </div>
     </div>
   );

@@ -22,6 +22,7 @@ import ContactUsPage from './routes/ContactUsPage';
 
 export default function App() {
   return (
+    <div>
     <UserProvider>
       <Router>
         <Routes>
@@ -37,6 +38,8 @@ export default function App() {
           
             <Route path="/succes"           element={<PaymentSuccessPage />} />
             <Route path="/cancel"           element={<PaymentCancelPage />} />
+            <Route path="/legalmentions"    element={<MentionsLegalesPage />} />
+            <Route path='/contact-us'        element={<ContactUsPage />} />
 
           {/* PROTÉGÉ */}
           <Route element={<CheckAuth />}>
@@ -46,13 +49,23 @@ export default function App() {
             <Route path="/add-warranty"     element={<WarantyAddPage />} />
             <Route path="/warranty"         element={<MyWarrantyPage />} />
             <Route path="/subscribe"        element={<SubscribePage />} />
-            <Route path="/legalmentions"    element={<MentionsLegalesPage />} />
-            <Route path='/contact-us'        element={<ContactUsPage />} />
           </Route>
           {/* 404 */}
            <Route path="*" element={<Navigate to="/home" replace />} />
+
+ 
         </Routes>
       </Router>
     </UserProvider>
+  
+  <script
+   
+    async
+    data-id="2256739799"
+    id="chtl-script"
+    type="text/javascript"
+    src="https://chatling.ai/js/embed.js"
+  ></script>
+  </div>
   );
 }
