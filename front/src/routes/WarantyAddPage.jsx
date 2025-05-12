@@ -35,6 +35,19 @@ export default function AddWarrantyPage() {
 
   const handleFileUpload = event => {
     const selected = event.target.files[0];
+    console.log(
+      selected,
+      selected.type,
+    );
+
+    if (selected.type !== 'image/jpeg' && selected.type !== 'image/png' && selected.type !== 'image/jpg') {
+      setMessage({
+        type: 'error',
+        text: 'Format de fichier non pris en charge. Veuillez télécharger un fichier au format JPEG, PNG ou JPG.'
+      });
+      return;
+    }
+    
     if (!selected) return;
     setFile(selected);
     setPreview(URL.createObjectURL(selected));
@@ -130,7 +143,7 @@ export default function AddWarrantyPage() {
                 <label className="block text-gray-700 mb-1">Document de garantie</label>
                 <label className="flex flex-col items-center justify-center border border-dashed border-gray-400 p-6 rounded-md cursor-pointer hover:bg-gray-50 transition">
                   <img src={addfile} alt="Ajouter un fichier" className="w-16 mb-2" />
-                  <span className="text-sm text-gray-600">Cliquez pour ajouter votre facture</span>
+                  <span className="text-sm text-gray-600">Cliquez pour ajouter votre facture <br />format pris en charge ('JPG', 'PNG', 'JPEG') </span>
                   <input
                     type="file"
                     accept="image/*,application/pdf"
